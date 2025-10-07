@@ -23,5 +23,5 @@ A mod for Hollow Knight: Silksong used for taking screenshots and marking them o
 4. Screenshots are saved in the `BepInEx\config\ScreenshotMarker\Save_X` folder, where X represents the save slot number.
 
 # 预览 / Preview
-![preview1.png](Screenshot/preview1.png)
-![preview2 .png](Screenshot/preview2.png)
+![preview1.png](https://raw.githubusercontent.com/DemoJameson/Silksong.ScreenshotMarker/refs/heads/master/Screenshot/preview1.png)
+![preview2 .png](https://raw.githubusercontent.com/DemoJameson/Silksong.ScreenshotMarker/refs/heads/master/Screenshot/preview2.png)
