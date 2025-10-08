@@ -1,7 +1,6 @@
 using BepInEx;
 using GlobalEnums;
 using HarmonyLib;
-using HutongGames.PlayMaker.Actions;
 using Silksong.ScreenshotMarker.Extensions;
 using System;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ public class MarkerManager : PluginComponent {
     private static string markerNamePrefix = "ScreenshotMarker_";
     private static MapMarkerMenu.MarkerTypes ScreenshotMarkerType = (MapMarkerMenu.MarkerTypes)9527;
     private static AudioSource placeAudioSource;
-    private static int currentSaveSlot => UIManager.instance.saveSlot;
+    private static int currentSaveSlot => UIManager._instance.saveSlot;
 
     private void Awake() {
         var bytes = GetEmbeddedResourceBytes("ScreenshotMarker.png");
@@ -30,7 +29,7 @@ public class MarkerManager : PluginComponent {
         tex.LoadImage(bytes);
         sprite = Sprite.Create(tex, new Rect(0, 0, 73, 73), Vector2.one / 2f);
 
-        if (UIManager.instance) {
+        if (UIManager._instance) {
             LoadMarkers(currentSaveSlot);
         }
     }
@@ -50,20 +49,20 @@ public class MarkerManager : PluginComponent {
             return;
         }
         
-        if (!UIManager.instance) {
+        if (!UIManager._instance) {
             return;
         }
 
-        if (!HeroController.instance || HeroController.instance.IsInputBlocked()) {
+        if (!HeroController._instance || HeroController._instance.IsInputBlocked()) {
             return;
         }
 
-        if (GameManager.instance) {
-            if (GameManager.instance.GameState != GameState.PLAYING) {
+        if (GameManager._instance) {
+            if (GameManager._instance.GameState != GameState.PLAYING) {
                 return;
             }
 
-            if (GameManager.instance.IsMemoryScene() && GameManager.instance.GetCurrentMapZoneEnum() != MapZone.CLOVER) {
+            if (GameManager._instance.IsMemoryScene() && GameManager._instance.GetCurrentMapZoneEnum() != MapZone.CLOVER) {
                 return;
             }
         }
@@ -90,8 +89,8 @@ public class MarkerManager : PluginComponent {
             return;
         }
 
-        var gameMap = GameManager.instance.gameMap;
-        var currentPosition = gameMap.GetMapPosition(HeroController.instance.transform.position, gameMap.currentScene,
+        var gameMap = GameManager._instance.gameMap;
+        var currentPosition = gameMap.GetMapPosition(HeroController._instance.transform.position, gameMap.currentScene,
             gameMap.currentSceneObj, gameMap.currentScenePos, gameMap.currentSceneSize);
 
         // 移除附近的截图标记

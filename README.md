@@ -3,10 +3,12 @@
 A mod for Hollow Knight: Silksong used for taking screenshots and marking them on the map.
 
 # 安装 
+0. 与RenoDX/Luma-Framework不兼容，请先卸载
 1. 下载并安装 [BepinEx](https://github.com/bepinex/bepinex/releases)。
 2. 下载本 Mod，将 dll 文件解压到 `BepInEx\plugins` 文件夹。
 
 # Installation
+0. Not compatible with RenoDX/Luma-Framework, please uninstall first
 1. Download and install [BepinEx](https://github.com/bepinex/bepinex/releases).
 2. Download this mod, and extract the dll file to the `BepInEx\plugins` folder.
 
