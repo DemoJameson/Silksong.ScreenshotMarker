@@ -98,8 +98,28 @@ public class ScreenshotDisplayController : MonoBehaviour {
         HeroActions inputActions = ManagerSingleton<InputHandler>.Instance.inputActions;
         Platform.MenuActions menuAction = Platform.Current.GetMenuAction(inputActions);
 
-        if (PluginConfig.ScreenshotKey.IsDown() || inputActions.QuickMap.WasPressed ||
+        if (PluginConfig.ScreenshotKey.IsDown() || 
             Input.GetKeyDown(KeyCode.Escape) ||
+            inputActions.MenuSubmit.WasPressed ||
+            inputActions.MenuCancel.WasPressed ||
+            inputActions.MenuExtra.WasPressed ||
+            inputActions.MenuSuper.WasPressed ||
+            inputActions.Jump.WasPressed ||
+            inputActions.Evade.WasPressed ||
+            inputActions.Dash.WasPressed ||
+            inputActions.SuperDash.WasPressed ||
+            inputActions.DreamNail.WasPressed ||
+            inputActions.Attack.WasPressed ||
+            inputActions.Cast.WasPressed ||
+            inputActions.QuickMap.WasPressed ||
+            inputActions.QuickCast.WasPressed ||
+            inputActions.Taunt.WasPressed ||
+            inputActions.OpenInventory.WasPressed ||
+            inputActions.OpenInventoryMap.WasPressed ||
+            inputActions.OpenInventoryJournal.WasPressed ||
+            inputActions.OpenInventoryTools.WasPressed ||
+            inputActions.OpenInventoryQuests.WasPressed ||
+            inputActions.Pause.WasPressed ||
             menuAction == Platform.MenuActions.Submit || menuAction == Platform.MenuActions.Cancel) {
             ScreenshotDisplay.Close();
         }
