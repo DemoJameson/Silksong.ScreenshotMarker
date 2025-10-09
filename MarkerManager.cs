@@ -22,7 +22,7 @@ public class MarkerManager : PluginComponent {
     private static string markerNamePrefix = "ScreenshotMarker_";
     private static MapMarkerMenu.MarkerTypes ScreenshotMarkerType = (MapMarkerMenu.MarkerTypes)9527;
     private static AudioSource placeAudioSource;
-    private static int currentSaveSlot => UIManager._instance.saveSlot;
+    private static int currentSaveSlot => GameManager._instance.profileID;
 
     private void Awake() {
         var bytes = GetEmbeddedResourceBytes("ScreenshotMarker.png");
@@ -30,7 +30,7 @@ public class MarkerManager : PluginComponent {
         tex.LoadImage(bytes);
         sprite = Sprite.Create(tex, new Rect(0, 0, 73, 73), Vector2.one / 2f);
 
-        if (UIManager._instance) {
+        if (GameManager._instance && currentSaveSlot > 0) {
             LoadMarkers(currentSaveSlot);
         }
     }
@@ -50,10 +50,6 @@ public class MarkerManager : PluginComponent {
             return;
         }
 
-        if (!UIManager._instance) {
-            return;
-        }
-
         if (!HeroController._instance || HeroController._instance.IsInputBlocked()) {
             return;
         }
@@ -68,7 +64,6 @@ public class MarkerManager : PluginComponent {
                 return;
             }
         }
-
 
         HeroActions actions = ManagerSingleton<InputHandler>.Instance.inputActions;
         if (PluginConfig.ScreenshotKey.IsDown() || actions.QuickMap.WasPressed && actions.DreamNail.IsPressed) {
