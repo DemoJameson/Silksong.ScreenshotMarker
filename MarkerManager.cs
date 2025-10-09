@@ -90,6 +90,7 @@ public class MarkerManager : PluginComponent {
         }
 
         var gameMap = GameManager._instance.gameMap;
+        gameMap.UpdateCurrentScene();
         var currentPosition = gameMap.GetMapPosition(HeroController._instance.transform.position, gameMap.currentScene,
             gameMap.currentSceneObj, gameMap.currentScenePos, gameMap.currentSceneSize);
 
