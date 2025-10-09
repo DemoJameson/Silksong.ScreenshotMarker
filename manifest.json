@@ -1,6 +1,6 @@
 {
 	"name":"ScreenshotMarker",
-	"version_number":"1.0.3",
+	"version_number":"1.0.4",
 	"website_url": "https://github.com/DemoJameson/Silksong.ScreenshotMarker",
 	"description":"Take screenshots and marking them on the map.",
 	"dependencies": ["BepInEx-BepInExPack_Silksong-5.4.2303"]
