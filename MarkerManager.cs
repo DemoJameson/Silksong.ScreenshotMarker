@@ -3,6 +3,7 @@ using GlobalEnums;
 using HarmonyLib;
 using Silksong.ScreenshotMarker.Extensions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -48,7 +49,7 @@ public class MarkerManager : PluginComponent {
         if (!PluginConfig.Enabled.Value) {
             return;
         }
-        
+
         if (!UIManager._instance) {
             return;
         }
@@ -62,7 +63,8 @@ public class MarkerManager : PluginComponent {
                 return;
             }
 
-            if (GameManager._instance.IsMemoryScene() && GameManager._instance.GetCurrentMapZoneEnum() != MapZone.CLOVER) {
+            if (GameManager._instance.IsMemoryScene() &&
+                GameManager._instance.GetCurrentMapZoneEnum() != MapZone.CLOVER) {
                 return;
             }
         }
@@ -70,23 +72,25 @@ public class MarkerManager : PluginComponent {
 
         HeroActions actions = ManagerSingleton<InputHandler>.Instance.inputActions;
         if (PluginConfig.ScreenshotKey.IsDown() || actions.QuickMap.WasPressed && actions.DreamNail.IsPressed) {
-            CaptureScreenshot();
+            StartCoroutine(CreateScreenshotMarker());
         }
     }
 
     private static string GetScreenshotPath(int saveSlot) =>
         Path.Combine(Paths.ConfigPath, "ScreenshotMarker", "Save_" + saveSlot);
-    
+
     private static string GetScreenshotFilePath(int saveSlot, string fileName) =>
         Path.Combine(GetScreenshotPath(saveSlot), fileName);
 
     private static string GetMarkerDataPath(int saveSlot) =>
         Path.Combine(GetScreenshotPath(saveSlot), "marker_data.json");
 
-    private static void CaptureScreenshot() {
+    private static IEnumerator CreateScreenshotMarker() {
+        yield return new WaitForEndOfFrame();
+
         int saveSlot = currentSaveSlot;
         if (saveSlot <= 0) {
-            return;
+            yield break;
         }
 
         var gameMap = GameManager._instance.gameMap;
@@ -112,7 +116,7 @@ public class MarkerManager : PluginComponent {
         };
 
         Directory.CreateDirectory(GetScreenshotPath(saveSlot));
-        ScreenCapture.CaptureScreenshot(filePath);
+        TakeScreenshot(filePath);
         markerDataList.Add(markerData);
         SaveMakers(saveSlot);
 
@@ -148,7 +152,7 @@ public class MarkerManager : PluginComponent {
         spawnedMapMarkers.Add(newObject);
         return newObject;
     }
-    
+
     // TODO 显示图片时进去取消按钮
     // 显示图片时禁用隐藏图钉按钮
     [HarmonyPatch(typeof(InventoryItemSelectedAction), nameof(InventoryItemSelectedAction.DoAction))]
@@ -282,6 +286,36 @@ public class MarkerManager : PluginComponent {
             File.Delete(GetScreenshotFilePath(currentSaveSlot, markerData.FileName));
             SaveMakers(currentSaveSlot);
         }
+    }
+
+    private static void TakeScreenshot(string filePath) {
+        int screenWidth = Screen.width;
+        int screenHeight = Screen.height;
+
+        float aspectRatio = (float)screenWidth / screenHeight;
+        int targetHeight = Mathf.Min(screenHeight, 1080);
+        int targetWidth = Mathf.RoundToInt(aspectRatio * targetHeight);
+
+        var camera = Camera.main;
+
+        var origTargetTexture = camera.targetTexture;
+        var origActive = RenderTexture.active;
+
+        RenderTexture rt = new RenderTexture(targetWidth, targetHeight, 24);
+        camera.targetTexture = rt;
+        camera.Render();
+
+        RenderTexture.active = rt;
+        Texture2D screenshot = new Texture2D(targetWidth, targetHeight, TextureFormat.RGB24, false);
+        screenshot.ReadPixels(new Rect(0, 0, targetWidth, targetHeight), 0, 0);
+        screenshot.Apply();
+
+        File.WriteAllBytes(filePath, screenshot.EncodeToPNG());
+
+        camera.targetTexture = origTargetTexture;
+        RenderTexture.active = origActive;
+        Destroy(rt);
+        Destroy(screenshot);
     }
 
     private static byte[] GetEmbeddedResourceBytes(string resourceName) {
