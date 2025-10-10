@@ -35,6 +35,9 @@
 
     <ItemGroup>
       <None Remove="ScreenshotMarker.png" />
+    </ItemGroup>
+
+    <ItemGroup>
       <EmbeddedResource Include="ScreenshotMarker.png" />
     </ItemGroup>
 
