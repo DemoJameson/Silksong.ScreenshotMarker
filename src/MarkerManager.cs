@@ -105,7 +105,7 @@ public class MarkerManager : PluginComponent {
             }
         }
 
-        string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".png";
+        string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + (RenoDxOrLumaEnabled ? ".exr" : ".png");
         string filePath = GetScreenshotFilePath(saveSlot, fileName);
 
         var markerData = new MarkerData {
@@ -302,16 +302,31 @@ public class MarkerManager : PluginComponent {
         var origTargetTexture = camera.targetTexture;
         var origActive = RenderTexture.active;
 
-        RenderTexture rt = new RenderTexture(targetWidth, targetHeight, 24);
+        RenderTexture rt = new RenderTexture(targetWidth, targetHeight, 24,
+            RenoDxOrLumaEnabled ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.Default);
         camera.targetTexture = rt;
         camera.Render();
 
         RenderTexture.active = rt;
-        Texture2D screenshot = new Texture2D(targetWidth, targetHeight, TextureFormat.RGB24, false);
+        Texture2D screenshot = new Texture2D(targetWidth, targetHeight,
+            RenoDxOrLumaEnabled ? TextureFormat.RGBAHalf : TextureFormat.RGB24, false);
         screenshot.ReadPixels(new Rect(0, 0, targetWidth, targetHeight), 0, 0);
+        
+        if (RenoDxOrLumaEnabled) {
+            Color[] pixels = screenshot.GetPixels();
+            for (int i = 0; i < pixels.Length; i++) {
+                pixels[i].a = 1f;
+            }
+            screenshot.SetPixels(pixels);
+        }
+        
         screenshot.Apply();
 
-        File.WriteAllBytes(filePath, screenshot.EncodeToPNG());
+        if (RenoDxOrLumaEnabled) {
+            File.WriteAllBytes(filePath, screenshot.EncodeToEXR(Texture2D.EXRFlags.CompressPIZ));
+        } else {
+            File.WriteAllBytes(filePath, screenshot.EncodeToPNG());
+        }
 
         camera.targetTexture = origTargetTexture;
         RenderTexture.active = origActive;
@@ -355,5 +370,25 @@ public class MarkerManager : PluginComponent {
         using var memoryStream = new MemoryStream();
         stream.CopyTo(memoryStream);
         return memoryStream.ToArray();
+    }
+
+    private static bool? renoDxOrLumaEnabled;
+
+    private static bool RenoDxOrLumaEnabled {
+        get {
+            if (renoDxOrLumaEnabled != null) {
+                return renoDxOrLumaEnabled.Value;
+            }
+
+            if (File.Exists(Path.Combine(Paths.GameRootPath, "dxgi.dll"))) {
+                renoDxOrLumaEnabled =
+                    File.Exists(Path.Combine(Paths.GameRootPath, "renodx-hollowknight-silksong.addon64")) ||
+                    File.Exists(Path.Combine(Paths.GameRootPath, "Luma-Unity Engine.addon"));
+            } else {
+                renoDxOrLumaEnabled = false;
+            }
+
+            return renoDxOrLumaEnabled.Value;
+        }
     }
 }
