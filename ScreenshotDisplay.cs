@@ -16,7 +16,7 @@ public class ScreenshotDisplay : MonoBehaviour {
             Close();
         }
 
-        GameObject displayObject = new GameObject("ScreenshotDisplay");
+        GameObject displayObject = new GameObject("ScreenshotMarker_ScreenshotDisplay");
         instance = displayObject.AddComponent<ScreenshotDisplay>();
         instance.InitializeUI(filePath);
     }
@@ -37,7 +37,7 @@ public class ScreenshotDisplay : MonoBehaviour {
         canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
 
-        GameObject panel = new GameObject("Panel");
+        GameObject panel = new GameObject("ScreenshotMarker_Panel");
         panel.transform.SetParent(transform, false);
         Image panelImage = panel.AddComponent<Image>();
         panelImage.color = new Color(0, 0, 0, 0.8f);
@@ -46,7 +46,7 @@ public class ScreenshotDisplay : MonoBehaviour {
         panelRect.anchorMax = Vector2.one;
         panelRect.sizeDelta = Vector2.zero;
 
-        GameObject imageObj = new GameObject("ScreenshotImage");
+        GameObject imageObj = new GameObject("ScreenshotMarker_Image");
         imageObj.transform.SetParent(panel.transform, false);
         Image image = imageObj.AddComponent<Image>();
 

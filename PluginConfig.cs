@@ -5,6 +5,7 @@ namespace Silksong.ScreenshotMarker;
 
 public class PluginConfig : PluginComponent {
     public static ConfigEntry<bool> Enabled { get; private set; }
+    public static ConfigEntry<bool> FlashEffect { get; private set; }
     public static ConfigEntry<float> ScreenshotScale { get; private set; }
     public static ConfigEntry<KeyboardShortcut> ScreenshotKey { get; private set; }
 
@@ -17,7 +18,14 @@ public class PluginConfig : PluginComponent {
             true,
             "Whether to enable screenshot marker"
         );
-        
+
+        FlashEffect = config.Bind(
+            "General",
+            "Flash Effect",
+            true,
+            "Whether to enable flash effect when taking a screenshot"
+        );
+
         ScreenshotScale = config.Bind(
             "General",
             "Screenshot Scale",

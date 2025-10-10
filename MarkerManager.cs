@@ -9,7 +9,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 using Random = UnityEngine.Random;
 
 namespace Silksong.ScreenshotMarker;
@@ -67,7 +69,13 @@ public class MarkerManager : PluginComponent {
 
         HeroActions actions = ManagerSingleton<InputHandler>.Instance.inputActions;
         if (PluginConfig.ScreenshotKey.IsDown() || actions.QuickMap.WasPressed && actions.DreamNail.IsPressed) {
-            StartCoroutine(CreateScreenshotMarker());
+            if (currentSaveSlot > 0) {
+                StartCoroutine(CreateScreenshotMarker());
+
+                if (PluginConfig.FlashEffect.Value) {
+                    StartCoroutine(CreateFlashEffect());
+                }
+            }
         }
     }
 
@@ -84,9 +92,6 @@ public class MarkerManager : PluginComponent {
         yield return new WaitForEndOfFrame();
 
         int saveSlot = currentSaveSlot;
-        if (saveSlot <= 0) {
-            yield break;
-        }
 
         var gameMap = GameManager._instance.gameMap;
         gameMap.UpdateCurrentScene();
@@ -112,6 +117,7 @@ public class MarkerManager : PluginComponent {
 
         Directory.CreateDirectory(GetScreenshotPath(saveSlot));
         TakeScreenshot(filePath);
+
         markerDataList.Add(markerData);
         SaveMakers(saveSlot);
 
@@ -311,6 +317,31 @@ public class MarkerManager : PluginComponent {
         RenderTexture.active = origActive;
         Destroy(rt);
         Destroy(screenshot);
+    }
+
+    private static IEnumerator CreateFlashEffect() {
+        GameObject flashObject = new GameObject("ScreenshotMarker_Flash");
+        Canvas canvas = flashObject.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 9999;
+
+        CanvasScaler scaler = flashObject.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+
+        Image flashImage = flashObject.AddComponent<Image>();
+        flashImage.color = new Color(1f, 1f, 1f, 0.2f);
+
+        float duration = 0.3f;
+        float elapsed = 0f;
+        while (elapsed < duration) {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(0.2f, 0f, elapsed / duration);
+            flashImage.color = new Color(1f, 1f, 1f, alpha);
+            yield return null;
+        }
+
+        Destroy(flashObject);
     }
 
     private static byte[] GetEmbeddedResourceBytes(string resourceName) {
