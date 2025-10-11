@@ -1,7 +1,7 @@
 # Changelog
 
 ## 1.2.0
-* feat: Support using change mark button to view screenshot.
+* feat: Support using change marker button to view screenshot.
 * fix: Multiple nearby markers cannot be selected accurately.
 
 ## 1.1.0
