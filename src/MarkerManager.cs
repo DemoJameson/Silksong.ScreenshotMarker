@@ -67,7 +67,7 @@ public class MarkerManager : PluginComponent {
             }
         }
 
-        HeroActions actions = ManagerSingleton<InputHandler>.Instance.inputActions;
+        HeroActions actions = InputHandler.Instance.inputActions;
         if (PluginConfig.ScreenshotKey.IsDown() || actions.QuickMap.WasPressed && actions.DreamNail.IsPressed) {
             if (currentSaveSlot > 0) {
                 StartCoroutine(CreateScreenshotMarker());
@@ -171,8 +171,9 @@ public class MarkerManager : PluginComponent {
     private static bool MapMarkerMenuUpdate(MapMarkerMenu __instance) {
         if (__instance.inPlacementMode && __instance.collidingMarkers.Count > 0) {
             if (!ScreenshotDisplay.IsShowing) {
-                HeroActions inputActions = ManagerSingleton<InputHandler>.Instance.inputActions;
-                if (PluginConfig.ScreenshotKey.IsDown() || inputActions.QuickMap.WasPressed) {
+                HeroActions inputActions = InputHandler.Instance.inputActions;
+                Platform.MenuActions menuAction = Platform.Current.GetMenuAction(inputActions);
+                if (PluginConfig.ScreenshotKey.IsDown() || inputActions.QuickMap.WasPressed || menuAction == Platform.MenuActions.Extra) {
                     var invMarker = __instance.collidingMarkers[^1].GetComponent<InvMarker>();
                     if (invMarker.Colour != ScreenshotMarkerType) {
                         return true;
