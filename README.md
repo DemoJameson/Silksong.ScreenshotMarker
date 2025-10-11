@@ -13,13 +13,13 @@ A mod for Hollow Knight: Silksong used for taking screenshots and marking them o
 # 使用
 1. 键盘按P键截图并标记在地图中（可编辑 `BepInEx\config\mod.silksong.screenshotmarker.cfg` 文件改键）。
 2. 手柄先按弹琴再按快速地图截图并标记在地图中。
-3. 打开地图蓝色的标记即截图标记。从制图师手中购买一个标记工具后开启标记模式，即可以像普通标记一样进行移除，选中后按截图键或者快速地图键则可以进行查看。
+3. 打开地图蓝色的标记即截图标记。从制图师手中购买一个标记工具后启标记模式，可以像普通标记一样进行移除，选中后按截图键、快速地图键、切换标记键均可以进行查看。
 4. 截图保存在 `BepInEx\config\ScreenshotMarker\Save_X` 文件夹中，X代表第几个存档。
 
 # Usage
 1. Keyboard user: Press the P key to take a screenshot and mark it on the map (change the key by editing the file `BepInEx\config\mod.silksong.screenshotmarker.cfg`).
 2. Controller user: First press the needolin button first, then press the quick map button to take a screenshot and mark it on the map.
-3. Open the map, the blue markers are the screenshot markers, which can be removed like normal markers. After selecting, press the screenshot key or the quick map button to view the screenshot. (Requires purchasing at least one marker from Shakra to enable placement mode)
+3. Open the map, the blue markers are the screenshot markers, which can be removed like normal markers. After selecting, press the screenshot key or the quick map button or the change marker button to view the screenshot. (Requires purchasing at least one marker from Shakra to enable placement mode)
 4. Screenshots are saved in the `BepInEx\config\ScreenshotMarker\Save_X` folder, where X represents the save slot number.
 
 # 致谢 / Acknowledgments

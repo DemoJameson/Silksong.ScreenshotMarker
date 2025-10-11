@@ -364,13 +364,14 @@ public class MarkerManager : PluginComponent {
         scaler.referenceResolution = new Vector2(1920, 1080);
 
         Image flashImage = flashObject.AddComponent<Image>();
-        flashImage.color = new Color(1f, 1f, 1f, 0.2f);
+        float defaultAlpha = 0.25f;
+        flashImage.color = new Color(1f, 1f, 1f, defaultAlpha);
 
         float duration = 0.3f;
         float elapsed = 0f;
         while (elapsed < duration) {
             elapsed += Time.deltaTime;
-            float alpha = Mathf.Lerp(0.2f, 0f, elapsed / duration);
+            float alpha = Mathf.Lerp(defaultAlpha, 0f, elapsed / duration);
             flashImage.color = new Color(1f, 1f, 1f, alpha);
             yield return null;
         }
