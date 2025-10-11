@@ -173,9 +173,8 @@ public class MarkerManager : PluginComponent {
         });
     }
 
-    // TODO 显示图片时进去取消按钮
-    // 显示图片时禁用隐藏图钉按钮
-    [HarmonyPatch(typeof(InventoryItemSelectedAction), nameof(InventoryItemSelectedAction.DoAction))]
+    // 显示图片时禁用菜单按钮
+    [HarmonyPatch(typeof(Platform), nameof(Platform.GetMenuAction), typeof(HeroActions), typeof(bool), typeof(bool))]
     [HarmonyPrefix]
     private static bool InventoryItemSelectedActionDoAction() {
         if (ScreenshotDisplay.IsShowing) {

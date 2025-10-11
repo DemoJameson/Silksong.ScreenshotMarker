@@ -96,7 +96,6 @@ public class ScreenshotDisplay : MonoBehaviour {
 public class ScreenshotDisplayController : MonoBehaviour {
     void Update() {
         HeroActions inputActions = InputHandler.Instance.inputActions;
-        Platform.MenuActions menuAction = Platform.Current.GetMenuAction(inputActions);
 
         if (PluginConfig.ScreenshotKey.IsDown() || 
             Input.GetKeyDown(KeyCode.Escape) ||
@@ -119,11 +118,7 @@ public class ScreenshotDisplayController : MonoBehaviour {
             inputActions.OpenInventoryJournal.WasPressed ||
             inputActions.OpenInventoryTools.WasPressed ||
             inputActions.OpenInventoryQuests.WasPressed ||
-            inputActions.Pause.WasPressed ||
-            menuAction == Platform.MenuActions.Submit ||
-            menuAction == Platform.MenuActions.Cancel ||
-            menuAction == Platform.MenuActions.Extra ||
-            menuAction == Platform.MenuActions.Super
+            inputActions.Pause.WasPressed
             ) {
             ScreenshotDisplay.Close();
         }
