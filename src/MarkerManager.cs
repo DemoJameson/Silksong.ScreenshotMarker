@@ -153,6 +153,25 @@ public class MarkerManager : PluginComponent {
         spawnedMapMarkers.Add(newObject);
         return newObject;
     }
+    
+    // 从远到近排序，解决标记过于靠近无法准确吸附的问题
+    [HarmonyPatch(typeof(MapMarkerMenu), nameof(MapMarkerMenu.AddToCollidingList))]
+    [HarmonyPostfix]
+    private static void MapMarkerMenuAddToCollidingList(MapMarkerMenu __instance) {
+        var collidingMarkers = __instance.collidingMarkers;
+        var cursorPosition = __instance.placementCursor.transform.position;
+        var gameMapPosition = __instance.gameMap.transform.parent.position;
+        collidingMarkers.Sort((go1, go2) => {
+            float distance1 = Vector2.Distance(go1.transform.position - gameMapPosition, cursorPosition);
+            float distance2 = Vector2.Distance(go2.transform.position - gameMapPosition, cursorPosition);
+            float diff = distance2 -distance1;
+            return diff switch {
+                > 0 => 1,
+                < 0 => -1,
+                _ => 0,
+            };
+        });
+    }
 
     // TODO 显示图片时进去取消按钮
     // 显示图片时禁用隐藏图钉按钮
