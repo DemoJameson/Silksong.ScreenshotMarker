@@ -24,7 +24,7 @@ public class MarkerManager : PluginComponent {
     private static Sprite sprite;
     private static string markerNamePrefix = "ScreenshotMarker_";
     private static MapMarkerMenu.MarkerTypes ScreenshotMarkerType = (MapMarkerMenu.MarkerTypes)9527;
-    private static AudioSource placeAudioSource;
+    private static AudioSource placeAudioSource = null!;
     private static int currentSaveSlot => GameManager._instance.profileID;
 
     private void Awake() {

@@ -5,11 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ScreenshotDisplay : MonoBehaviour {
-    private static ScreenshotDisplay instance;
+    private static ScreenshotDisplay? instance;
     public static bool IsShowing => instance != null;
 
-    private Texture2D screenshotTexture;
-    private Sprite screenshotSprite;
+    private Texture2D? screenshotTexture;
+    private Sprite? screenshotSprite;
 
     public static void Show(string filePath) {
         if (instance) {
