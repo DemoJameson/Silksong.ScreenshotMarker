@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.1
+* fix: This mod does not work in the game version 1.0.29139.
+
 ## 1.2.0
 * feat: Support using change marker button to view screenshot.
 * fix: Multiple nearby markers cannot be selected accurately.
