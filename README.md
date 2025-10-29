@@ -26,5 +26,5 @@ A mod for Hollow Knight: Silksong used for taking screenshots and marking them o
 1. alexkiri 的改进使其兼容 RenoDX 和 Luma-Framework。Alexkiri's improvements have made it compatible with RenoDX and Luma-Framework.
 
 # 预览 / Preview
-![preview1.png](https://raw.githubusercontent.com/DemoJameson/Silksong.ScreenshotMarker/refs/heads/master/Screenshot/preview1.png)
-![preview2 .png](https://raw.githubusercontent.com/DemoJameson/Silksong.ScreenshotMarker/refs/heads/master/Screenshot/preview2.png)
+![preview1.png](https://raw.githubusercontent.com/DemoJameson/Silksong.ScreenshotMarker/refs/heads/main/Screenshot/preview1.png)
+![preview2 .png](https://raw.githubusercontent.com/DemoJameson/Silksong.ScreenshotMarker/refs/heads/main/Screenshot/preview2.png)
