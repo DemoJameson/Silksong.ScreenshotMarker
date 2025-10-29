@@ -1,6 +1,7 @@
 using BepInEx;
 using GlobalEnums;
 using HarmonyLib;
+using Newtonsoft.Json;
 using Silksong.ScreenshotMarker.Extensions;
 using System;
 using System.Collections;
@@ -153,7 +154,7 @@ public class MarkerManager : PluginComponent {
         spawnedMapMarkers.Add(newObject);
         return newObject;
     }
-    
+
     // 从远到近排序，解决标记过于靠近无法准确吸附的问题
     [HarmonyPatch(typeof(MapMarkerMenu), nameof(MapMarkerMenu.AddToCollidingList))]
     [HarmonyPostfix]
@@ -164,7 +165,7 @@ public class MarkerManager : PluginComponent {
         collidingMarkers.Sort((go1, go2) => {
             float distance1 = Vector2.Distance(go1.transform.position - gameMapPosition, cursorPosition);
             float distance2 = Vector2.Distance(go2.transform.position - gameMapPosition, cursorPosition);
-            float diff = distance2 -distance1;
+            float diff = distance2 - distance1;
             return diff switch {
                 > 0 => 1,
                 < 0 => -1,
@@ -284,7 +285,7 @@ public class MarkerManager : PluginComponent {
         }
 
         string json = File.ReadAllText(GetMarkerDataPath(saveSlot));
-        markerDataList = SaveDataUtility.DeserializeSaveData<List<MarkerData>>(json);
+        markerDataList = JsonConvert.DeserializeObject<List<MarkerData>>(json) ?? [];
     }
 
     [HarmonyPatch(typeof(GameManager), nameof(GameManager.ClearSaveFile))]
@@ -298,7 +299,7 @@ public class MarkerManager : PluginComponent {
     }
 
     private static void SaveMakers(int saveSlot) {
-        File.WriteAllText(GetMarkerDataPath(saveSlot), SaveDataUtility.SerializeSaveData(markerDataList));
+        File.WriteAllText(GetMarkerDataPath(saveSlot), JsonConvert.SerializeObject(markerDataList));
     }
 
     private static void RemoveMarkerData(MarkerData markerData) {
@@ -330,15 +331,16 @@ public class MarkerManager : PluginComponent {
         Texture2D screenshot = new Texture2D(targetWidth, targetHeight,
             RenoDxOrLumaEnabled ? TextureFormat.RGBAHalf : TextureFormat.RGB24, false);
         screenshot.ReadPixels(new Rect(0, 0, targetWidth, targetHeight), 0, 0);
-        
+
         if (RenoDxOrLumaEnabled) {
             Color[] pixels = screenshot.GetPixels();
             for (int i = 0; i < pixels.Length; i++) {
                 pixels[i].a = 1f;
             }
+
             screenshot.SetPixels(pixels);
         }
-        
+
         screenshot.Apply();
 
         if (RenoDxOrLumaEnabled) {
